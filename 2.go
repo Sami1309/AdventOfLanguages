@@ -40,8 +40,8 @@ func findWrapping(data string) {
 
 	}
 
-	fmt.Printf("Wrapping paper needed: %d\n", totalWrapping)
-	fmt.Printf("Ribbon needed: %d", totalRibbon)
+	fmt.Printf("Wrapping paper needed: %d\n", totalWrapping) //Part 1 solution
+	fmt.Printf("Ribbon needed: %d", totalRibbon)             //Part 2 solution
 }
 
 func main() {
