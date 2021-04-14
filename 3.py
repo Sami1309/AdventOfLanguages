@@ -38,7 +38,7 @@ def solve(data):
             deliveredRobo.add(roboPos)
 
     print("With Santa and Robo-Santa,", len(deliveredReal.union(deliveredRobo)),
-          "houses receive at least 1 present")
+          "houses receive at least 1 present")  # Part 2 answer
 
 
 if __name__ == '__main__':

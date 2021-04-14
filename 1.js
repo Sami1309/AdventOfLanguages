@@ -7,7 +7,6 @@ fileData = fs.readFile('data/1.in', 'utf-8', (err,data) => {
 })
 
 function findFloor(data) {
-    // console.log(data)
 
     parens = data.split("")
 

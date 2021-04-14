@@ -22,21 +22,21 @@ func findWrapping(data string) {
 	for i := 0; i < len(packages); i++ {
 
 		dims := strings.Split(packages[i], "x")
-		var edges [3]int
+		var e [3]int //edges
 		for j := 0; j < 3; j++ {
 			var err error
-			edges[j], err = strconv.Atoi(dims[j])
+			e[j], err = strconv.Atoi(dims[j])
 			check(err)
 		}
-		sides := []int{edges[0] * edges[1], edges[1] * edges[2], edges[0] * edges[2]}
-		perimeters := []int{2 * (edges[0] + edges[1]), 2 * (edges[1] + edges[2]), 2 * (edges[0] + edges[2])}
-		volume := edges[0] * edges[1] * edges[2]
+		s := []int{e[0] * e[1], e[1] * e[2], e[0] * e[2]}                   //sides
+		p := []int{2 * (e[0] + e[1]), 2 * (e[1] + e[2]), 2 * (e[0] + e[2])} //perimeters of each face
+		volume := e[0] * e[1] * e[2]
 
-		sort.Ints(perimeters)
-		sort.Ints(sides)
+		sort.Ints(p)
+		sort.Ints(s)
 
-		totalWrapping += 2*sides[0] + 2*sides[1] + 2*sides[2] + sides[0]
-		totalRibbon += perimeters[0] + volume
+		totalWrapping += 2*s[0] + 2*s[1] + 2*s[2] + s[0]
+		totalRibbon += p[0] + volume
 
 	}
 
