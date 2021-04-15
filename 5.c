@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+//C is the introverted prodigy senior who lets all the freshman copy his old homework
 void fillData(char **lines, FILE *fp, int fileLength)
 {
 
     fseek(fp, 0, SEEK_SET);
 
     int pos = 0;
-
     char line[256];
+
     while (fgets(line, 17, fp) != NULL)
     {
         if (strcmp(line, "\n") != 0)
@@ -19,26 +20,13 @@ void fillData(char **lines, FILE *fp, int fileLength)
             pos++;
         }
     }
-
-    fclose(fp);
 }
 
 int findFileLength(FILE *fp)
 {
 
-    if (fp == NULL)
-    {
-        perror("Error opening file");
-        exit(-1);
-    }
-
     int fileLength = 0;
     char line[256];
-
-    if (fgets(line, 256, fp) != NULL)
-    {
-        fileLength++;
-    }
 
     while (fgets(line, 256, fp) != NULL)
     {
@@ -51,14 +39,14 @@ int findFileLength(FILE *fp)
 void freeArray(char **lines, int fileLength)
 {
     for (int i = 0; i < fileLength; i++)
-    {
         free(lines[i]);
-    }
+
     free(lines);
 }
 
 int niceStrings(char **lines, int fileLength)
 {
+    //String must contain at least 1 vowel, none of the bad strings, and at least one set of double letters
     char vowels[5] = {'a', 'e', 'i', 'o', 'u'};
     char *badStrings[4] = {"ab", "cd", "pq", "xy"};
 
@@ -68,55 +56,30 @@ int niceStrings(char **lines, int fileLength)
     int invalidStrings;
     for (int i = 0; i < fileLength; i++)
     {
-        //printf("%s\n", lines[i]);
         vowelCount = 0;
         doubleLetters = 0;
         invalidStrings = 0;
 
+        //Pointer to beginning of string
         char *letter = lines[i];
-        char lastletter = ' ';
 
-        //printf(lines[i]);
+        //Iterate through every letter in the string
         for (letter; *letter; letter++)
         {
-            //printf("%c", *letter);
-            //printf(letter);
             for (int v = 0; v < 5; v++)
-            {
                 if (*letter == vowels[v])
-                {
                     vowelCount++;
-                }
-            }
-            if (lastletter == *letter)
-            {
-                doubleLetters++;
-            }
 
-            //printf(letter);
+            if (letter != lines[i] && *(letter - 1) == *letter)
+                doubleLetters++;
 
             for (int b = 0; b < 4; b++)
-            {
-                if (lastletter == (char)*badStrings[b] && *letter == *(badStrings[b] + 1))
-                {
+                if (letter != lines[i] && *(letter - 1) == *badStrings[b] && *letter == *(badStrings[b] + 1))
                     invalidStrings++;
-                }
-            }
-
-            lastletter = *letter;
         }
-        //printf("\n");
-        // printf(lines[i]);
-        // printf("\n");
-        // printf("Vowel count is %d\n", vowelCount);
-        // printf("Double letter pairs count is %d\n", doubleLetters);
-        // printf("Contains %d invalid strings\n", invalidStrings);
 
         if (vowelCount >= 3 && doubleLetters >= 1 && invalidStrings == 0)
-        {
             niceCount++;
-            //printf("%s\n", lines[i]);
-        }
     }
 
     return niceCount;
@@ -124,83 +87,65 @@ int niceStrings(char **lines, int fileLength)
 
 int niceStrings2(char **lines, int fileLength)
 {
-
+    //String must contain one pair of identical strings of length 2 each, non-overlapping,
+    //and 1 "sandwich" where two identical strings surround a third
     int niceCount = 0;
     int doublePairs;
     int sandwiches;
     for (int i = 0; i < fileLength; i++)
     {
-        //printf("%s\n", lines[i]);
         doublePairs = 0;
         sandwiches = 0;
 
-        char *twolast = lines[i];
-        char *onelast = lines[i] + 1;
-        char *letter = lines[i] + 2;
-
-        //printf(lines[i]);
-        for (letter; *letter; letter++)
+        for (char *letter = lines[i]; *letter; letter++)
         {
-            if (*letter == *twolast)
-            {
+            if (letter != lines[i] && letter - 1 != lines[i] && *letter == *(letter - 2))
                 sandwiches++;
-            }
 
-            char *let2 = letter;
-            char *let1 = letter + 1;
-            for (let1; *let1; let1++, let2++)
-            {
-                if (*let2 == *twolast && *let1 == *onelast)
-                {
-                    doublePairs++;
-                }
-            }
-
-            twolast++;
-            onelast++;
+            if (letter != lines[i])
+                for (int j = 2; *(letter + j); j++)
+                    if (*(letter + j - 1) == *(letter - 1) && *(letter + j) == *letter)
+                        doublePairs++;
         }
-
-        //printf("\n");
-        // printf(lines[i]);
-        // printf("\n");
-        // printf("Vowel count is %d\n", vowelCount);
-        // printf("Double letter pairs count is %d\n", doubleLetters);
-        // printf("Contains %d invalid strings\n", invalidStrings);
 
         if (sandwiches > 0 && doublePairs > 0)
-        {
             niceCount++;
-            printf("%s\n", lines[i]);
-        }
     }
 
     return niceCount;
 }
+
 int main()
 {
     FILE *fp;
     char *filename = "data/5.in\0";
     char **lines;
 
+    //Open the file containing the input
     fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        perror("Error opening file");
+        exit(-1);
+    }
 
+    //Cycle through the file to find its length
     int fileLength = findFileLength(fp);
 
-    lines = (char **)malloc(sizeof(char **) * fileLength);
+    //Use length to allocate an appropriately sized array to house the input
+    lines = (char **)malloc(sizeof(char *) * fileLength);
 
+    //Read the input into the array
     fillData(lines, fp, fileLength);
 
-    int numNice = niceStrings(lines, fileLength);
+    fclose(fp);
 
-    //test numNice
-    //char *testStrings[2] = {"dvszwmarrgswjxmb", "haegwjzuvuyypxyu"};
-    //int testNice = niceStrings(testStrings, 2);
+    //Part 1 solution
+    printf("%d\n", niceStrings(lines, fileLength));
 
-    printf("%d\n", numNice); //Part 1 solution
+    //Part 2 solution
+    printf("%d", niceStrings2(lines, fileLength));
 
-    int numNice2 = niceStrings2(lines, fileLength);
-
-    printf("%d", numNice2); //Part 2 solution
-
+    //Free the memory used for the array
     freeArray(lines, fileLength);
 }

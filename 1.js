@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-
+//Javascript is the guy running a million clubs yet never knows what's going on
 fileData = fs.readFile('data/1.in', 'utf-8', (err,data) => {
     if (err) throw err;
     findFloor(data)

@@ -1,4 +1,4 @@
-
+#Ruby is like a slightly worse Python
 def changeLights(data, part)
     lightArray = Array.new(1000) {Array.new(1000)}
     for la in lightArray

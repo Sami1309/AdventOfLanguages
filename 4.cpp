@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//C++ is the super smart track star that everybody likes
 string parseData(string filename)
 {
     ifstream input;
