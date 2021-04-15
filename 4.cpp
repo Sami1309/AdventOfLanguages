@@ -60,4 +60,6 @@ int main()
     int hashSuffix6 = calculateHashSuffix(input, 6);
 
     cout << hashSuffix6 << endl; //Part 2 answer
+
+    return 0;
 }
